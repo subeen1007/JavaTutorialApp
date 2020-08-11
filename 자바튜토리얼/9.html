@@ -1,0 +1,152 @@
+﻿※예외처리
+
+●예외 처리기
+-예외 처리기는 try블록과 catch블록으로 이루어 진다.
+-기본적으로 try블록에서 발생된 예외를 catch블록에서 처리한다.
+-형식:
+try{
+	//예외가 발생할 수 있는 코드
+} catch (예외종류 참조변수) {
+	//예외를 처리하는 코드
+} finally {
+	//여기 있는 코드는 try블록이 끝나면 무조건 실행된다.(finally는 생략가능)
+}
+●예외처리하는 이유
+-예외가 발생했을 경우, 단순히 경고 메시지를 출력하고 프로그램은 정상적으로 계속된다.
+	만약 예외처리를 하지 않으면, 프로그램은 비정상적으로 종료된다.
+
+●try/catch 블록에서의 실행 흐름
+-예외가 발생하지 않은 경우: catch 블록의 코드는 실행되지 않는다.
+-예외가 발생한 경우: catch 블록의 코드가  실행된다.
+-finally 블록은 항상 실행된다.
+
+●finally 블록
+-finally 블록은 try-catch 블록이 종료될 때에 반드시 실행된다.
+-finally 블록은 프로그래머가 실수로 자원 정리를 하지 않고 try-catch 블록을 종료하는 것을 방지한다.
+EX1)
+try {
+	out = new PrintWriter( ... );
+} catch (IOException e) {
+	throw new RunTimeException(e);
+}
+out. close();  // 예외가 발생하면 자원이 반납되지 않는다.
+
+EX2)
+try {
+	out = new PrintWriter( ... );
+} catch (IOException e) {
+	throw new RunTimeException(e);
+} finally {
+	out. close();  // 예외가 발생하더라도 자원이 반납된다.
+}
+
+
+●catch 블록
+-예외의 종류에 따라서 여러 개의 catch 블록이 있을 수 있다. 
+-이중에서 발생한 예외의 종류와 일치하는 catch 블록만 실행된다.
+-일치되는 catch 블록이 없으면 발생된 예외는 처리되지 않는다.
+
+●try-with-resources 문장
+-try-with-resources 문장은 하나 이상의 자원을 선언하는 try문장이다.
+-리소스(resources)는 프로그램이 종료되면서 반드시 닫혀져야 한다.
+-try-with-resources 문장은 끝에서 리소스들이 자동으로 닫혀지게 된다.
+
+-형식:
+try (리소스자료형1 변수1 = 초기값1; 리소스자료형2 변수2 = 초기값2; ... ) {
+	...
+}
+
+●예외의 종류
+-모든 예외는 Throwable 클래스로부터 상속되어서 Error와 Exception이라고 하는 두 개의 클래스로 나누어진다.
+Exception은 다시 RuntimeException과 그 외로 나누어진다.
+
+Object
+    ⤷Throwable	     
+	⤷Error
+	     ⤷...
+	⤷Exception
+	     ⤷...
+	     ⤷RuntimeException
+		⤷...
+
+●Error
+-Error는 자바 가상 기계 안에서 치명적인 오류가 발생하면 생성된다.
+-EX)하드웨어의 오류로 인하여 파일을 읽을 수 없는 경우(IOError)
+-Error는 예외 처리의 대상이 아니다. 따라서 컴파일러가 체크하지 않는다.
+
+●RuntimeException
+-주로 프로그래밍 버그나 논리 오류에서 기인한다.
+-RuntimeException도 예외 처리의 주된 대상이 아니다. 따라서 컴파일러가 체크하지 않는다.
+-Error와 RuntimeException를 합쳐 비체크 예외라고 한다.
+
+분류		예외				설명
+		ArithmeticException		어떤 수를 0으로 나눌때 발생
+		NullPointerException		널 객체를 참조할 때 발생
+		ClassCastException			적절치 못하게 클래스를 형변환하는 경우
+RuntimeException	NegativeArraySizeException		배열의 크기가 음수값인 경우
+		OutOfMemoryException		사용 가능한 메모리가 없는 경우
+		NoClassDefFoundException		원하는 클래스를 찾지 못하였을 경우
+		ArrayIndexOutOfBoundsException	배열을 참조하는 인덱스가 잘못된 경우
+
+●Error와 RuntimeException을 제외한 나머지 예외
+-체크 예외라고 불린다.
+-이 예외들은 충분히 예견될 수 있고, 회복할 수 있는 예외이므로 프로그램은 반드시 처리하여야 한다.
+-EX)사용자에게 입력파일 이름을 받아서 파일을 오픈하려는 상황에서 사용자가 잘못된 파일이름을 
+	입력한다면 FileNotFoundException 예외가 발생
+
+●다형성과 예외
+-자바에서는 예외도 객체로 취급된다.
+-따라서, 다형성의 원칙에 의해 상위 클래스의 참조 변수는 하위 클래스의 객체를 참조할 수 있다.
+-예외를 처리할 때에도 상위 클래스를 이용하여 하위 클래스까지 포괄적으로 처리할 수 있다.
+
+●예외와 메소드
+-예외 처리하는 2가지 방법
+	1)예외를 잡아서 그 자리에서 처리하는 방법: try-catch 블록을 사용하여서 예외를 잡고 처리한다. 
+	2)메소드가 예외를 발생시킨다고 기술하는 방법: throws를 사용하여, 
+		다른 메소드한테 예외처리를 맡긴다.
+
+●메소드가 예외를 발생시킨다고 기술하는 방법
+-발생하는 예외를 바로 처리하지 않으려면 반드시 메소드가 이들 예외를 던진다고 메소드 정의에 표시해야 한다.
+-EX)
+public void writeList() throws IOException, ArrayIndexOutOfBoundsException 
+{
+	...
+}
+
+●예외의 처리 과정
+-어떤 메소드 안에서 예외가 발생하면 런타임 시스템은 그 메소드 안에 예외 처리기가 있는 지를 살핀다.
+-만약 그 자리에 예외 처리기가 없다면 메소드가 호출된 순서대로 호출 스택에 있는 상위 메소드를
+ 조사하여 예외처리기를 가지고 있는 메소드를 탐색한다.
+-전체 호출 스택을 뒤졌는데도 처리기를 발견하지 못하면 런타임 시스템이 그냥 프로그램을 종료시킨다.
+
+●예외 생성하기
+-예외 객체를 생성하는 키워드 throw가 존재(throws아님에 주의)
+-자바는 오류가 감지되면 throw문을 사용하여 예외를 생성한다.
+
+●throw 문장
+-어떤 메소드도 throw 문장을 사용하여서 예외를 생성할 수 있다.
+-throw 문장은 하나의 인수만을 요구하는데 바로 Throwable 객체이다. 
+-Throwable 객체는 Throwable 클래스를 상속받는 자식 클래스들의 인스턴스이다.
+-형식:
+throw someThrowableObject;
+
+●연속적인 예외 발생
+-catch 블록에서 예외를 처리 못하거나 다른 예외기로 작업을 위임할 경우 예외를 다시 발생시켜서 전달할 수 있다
+-이 경우 다음과 같은 형식을 사용:
+try {
+	...
+} catch (IOException e) {
+	throw new SampleException("다른 예외", e);  //이 문장에 의해 예외 객체가 생성
+}
+
+●사용자 정의 예외
+-다른 예외와 구별하여 처리하려면 사용자 정의 예외 클래스를 생성한다. 
+-이것은 보통 다음과 같이 Exception 클래스의 서브클래스를 생성시켜서 만든다
+public class MyException extends Exception {
+	...
+}
+
+●예외 처리의 장점
+-오류 처리 코드를 정상적인 코드와 분리할 수 있다.
+	-자바의 예외처리는 프로그램의 주된 처리와 오류처리가 분리되게 한다.	
+

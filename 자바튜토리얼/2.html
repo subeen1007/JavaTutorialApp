@@ -1,0 +1,68 @@
+※제어문-조건문
+<제어문>
+●3가지의 제어구조
+1) 순차구조: 순차적인 구조
+2) 선택구조: 조건식이 참이면 A, 거짓이면 B를 선택
+3) 반복구조: 조건식이 참이면 계속 반복, 거짓이면 반복을 종료
+
+●조건문의 종류
+-IF문
+-SWITCH문
+
+<IF문>
+●조건문- IF문
+-형식:
+if(조건식){  
+    문장1;  //조건식이 참이면 실행
+} else {
+    문장2;  //조건식이 거짓이면 실행
+}
+
+<SWITCH문>
+●조건문- SWITCH문
+-만약 가능한 실행 경로가 여러 개인 경우에는 switch 문을 사용
+-형식:
+switch(변수) {
+    case c1:
+        처리문장1;
+        break;
+    case c2:
+        처리문장2;
+        break;
+        ...
+    default:
+        처리문장d;
+        break;
+}
+-break문을 만나면 switch 문의 실행이 즉시 중지된다. 
+-가장 마지막은 default로 끝난다. 즉 주어진 케이스가 없는 경우 default 문이 실행된다.
+
+●만약 switch문에 break문이 없다면
+-switch문을 못 빠져나오고, 뒤에 케이스를 실행시킨다.
+-EX)
+switch(number) {
+    case 0:
+        System.out.println("없음");
+    case 1:
+        System.out.println("하나");
+    case 2:
+        System.out.println("둘");
+    default:
+        System.out.println("많음");
+        break;
+}
+number=0 일때 결과: 
+없음
+하나
+둘
+많음 
+
+<break와 continue>
+●break문
+-레이블이 있을 수도 없을 수도 있다.
+-레이블이 없는 break는 가장 안쪽 반복 루프를 종료하는데 사용된다.
+
+●continue문
+-continue문은 반복문에서 현재의 반복을 건너뛰게고 다음 반복을 실행하는 문장이다..
+-레이블이 없으면 가장 안쪽 루프 몸체의 끝으로 점프하여서 루프를 제어하는 조건식을 다시 계산하게 된다.
+
